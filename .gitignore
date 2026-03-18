@@ -1,0 +1,29 @@
+# Secrets — NEVER commit these
+.env
+.env.local
+.env*.local
+
+# Dependencies
+node_modules/
+frontend/node_modules/
+indexer/node_modules/
+
+# Hardhat build artifacts
+artifacts/
+cache/
+typechain-types/
+
+# Next.js
+frontend/.next/
+frontend/out/
+frontend/.vercel/
+
+# Indexer database (local SQLite, if any)
+indexer/data.db
+
+# Claude Code
+.claude/
+
+# Misc
+.DS_Store
+*.log

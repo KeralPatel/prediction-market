@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: predictx-indexer
+    runtime: node
+    rootDir: indexer
+    buildCommand: npm install
+    startCommand: node index.js
+    plan: free
+    envVars:
+      - key: INDEXER_RPC_URL
+        value: https://data-seed-prebsc-1-s1.binance.org:8545/
+      - key: INDEXER_CONTRACT_ADDR
+        sync: false   # Set this manually in the Render dashboard after deployment
+      - key: INDEXER_FROM_BLOCK
+        value: "0"    # Update to the deployment block after deploying contracts
+      - key: INDEXER_PORT
+        value: "10000"
+      - key: INDEXER_POLL_MS
+        value: "12000"
+      - key: DATABASE_URL
+        sync: false   # Set this manually in the Render dashboard (Supabase connection string)
