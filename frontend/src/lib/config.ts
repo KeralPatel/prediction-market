@@ -7,9 +7,9 @@ export const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "";
 export const TOKEN_ADDRESS    = process.env.NEXT_PUBLIC_TOKEN_ADDRESS    || "";
 
 // Human-readable amounts (in full tokens, e.g. "5" means 5 USDT)
-export const CREATION_FEE  = process.env.NEXT_PUBLIC_CREATION_FEE  || "5";
-export const TRADE_FEE     = process.env.NEXT_PUBLIC_TRADE_FEE     || "0.5";
-export const MIN_BET       = process.env.NEXT_PUBLIC_MIN_BET        || "1";
+export const CREATION_FEE  = (process.env.NEXT_PUBLIC_CREATION_FEE  || "5").trim();
+export const TRADE_FEE     = (process.env.NEXT_PUBLIC_TRADE_FEE     || "0.5").trim();
+export const MIN_BET       = (process.env.NEXT_PUBLIC_MIN_BET        || "1").trim();
 export const REFUND_DELAY  = Number(process.env.NEXT_PUBLIC_REFUND_DELAY  || 259200);
 
 export const INDEXER_URL  = process.env.NEXT_PUBLIC_INDEXER_URL || "";
