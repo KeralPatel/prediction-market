@@ -1,18 +1,18 @@
 // ─── Network / Chain Config ────────────────────────────────────────────────
 
-export const CHAIN_ID   = Number(process.env.NEXT_PUBLIC_CHAIN_ID   || 56);
-export const RPC_URL    =        process.env.NEXT_PUBLIC_RPC_URL    || "https://bsc-dataseed.binance.org/";
+export const CHAIN_ID   = Number((process.env.NEXT_PUBLIC_CHAIN_ID   || "56").trim());
+export const RPC_URL    =        (process.env.NEXT_PUBLIC_RPC_URL    || "https://bsc-dataseed.binance.org/").trim();
 
-export const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "";
-export const TOKEN_ADDRESS    = process.env.NEXT_PUBLIC_TOKEN_ADDRESS    || "";
+export const CONTRACT_ADDRESS = (process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "").trim();
+export const TOKEN_ADDRESS    = (process.env.NEXT_PUBLIC_TOKEN_ADDRESS    || "").trim();
 
 // Human-readable amounts (in full tokens, e.g. "5" means 5 USDT)
 export const CREATION_FEE  = (process.env.NEXT_PUBLIC_CREATION_FEE  || "5").trim();
 export const TRADE_FEE     = (process.env.NEXT_PUBLIC_TRADE_FEE     || "0.5").trim();
 export const MIN_BET       = (process.env.NEXT_PUBLIC_MIN_BET        || "1").trim();
-export const REFUND_DELAY  = Number(process.env.NEXT_PUBLIC_REFUND_DELAY  || 259200);
+export const REFUND_DELAY  = Number((process.env.NEXT_PUBLIC_REFUND_DELAY  || "259200").trim());
 
-export const INDEXER_URL  = process.env.NEXT_PUBLIC_INDEXER_URL || "";
+export const INDEXER_URL  = (process.env.NEXT_PUBLIC_INDEXER_URL || "").trim();
 
 // ─── Chain Metadata ────────────────────────────────────────────────────────
 
