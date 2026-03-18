@@ -29,7 +29,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 font-bold text-lg">
             <span className="text-2xl">◈</span>
-            <span className="text-gradient">PredictX</span>
+            <span className="text-gradient">Knightsbridge</span>
           </Link>
 
           {/* Navigation */}

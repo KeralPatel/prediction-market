@@ -4,10 +4,10 @@ import { WalletProvider } from "@/context/WalletContext";
 import Header from "@/components/Header";
 
 export const metadata: Metadata = {
-  title:       "PredictX – Decentralized Prediction Markets",
+  title:       "Knightsbridge – Decentralized Prediction Markets",
   description: "Bet on real-world events. Earn from your knowledge.",
   openGraph: {
-    title:       "PredictX",
+    title:       "Knightsbridge",
     description: "Decentralized prediction markets on BNB Chain",
     type:        "website",
   },
@@ -28,7 +28,7 @@ export default function RootLayout({
               {children}
             </main>
             <footer className="border-t border-[#2a3450] mt-16 py-8 text-center text-[#546e8a] text-sm">
-              <p>PredictX — Decentralized Prediction Markets on BNB Chain</p>
+              <p>Knightsbridge — Decentralized Prediction Markets on BNB Chain</p>
             </footer>
           </div>
         </WalletProvider>
