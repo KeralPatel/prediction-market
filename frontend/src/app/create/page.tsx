@@ -102,11 +102,16 @@ export default function CreatePage() {
         setTimeout(() => router.push("/"), 1500);
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : String(err);
-        const friendly = msg.includes("user rejected")
+        console.error("Create market error:", err);
+        const friendly = msg.includes("user rejected") || msg.includes("User denied")
           ? "Transaction rejected."
           : msg.includes("End time must be in future")
           ? "End time is in the past."
-          : "Failed to create market. Please try again.";
+          : msg.includes("insufficient") || msg.includes("transfer amount exceeds balance")
+          ? "Insufficient token balance. Call faucet() on the token contract to get test tokens."
+          : msg.includes("ERC20: insufficient allowance") || msg.includes("allowance")
+          ? "Token approval failed. Please try again."
+          : `Error: ${msg.slice(0, 120)}`;
         setTx({ status: "error", hash: null, message: friendly });
       }
     },
