@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { NewsItem } from "@/types";
 
+export const dynamic = "force-dynamic";
+
 const CACHE_TTL = 300_000; // 5 minutes
 let cache: { data: NewsItem[]; ts: number } | null = null;
 

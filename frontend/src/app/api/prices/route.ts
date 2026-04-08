@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 const CACHE_TTL = 60_000; // 60 seconds
 let cache: { data: unknown; ts: number } | null = null;
 

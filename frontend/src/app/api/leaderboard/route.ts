@@ -3,6 +3,8 @@ import { ethers } from "ethers";
 import { MARKET_FACTORY_ABI } from "@/lib/abi";
 import { LeaderboardEntry } from "@/types";
 
+export const dynamic = "force-dynamic";
+
 const CACHE_TTL = 120_000; // 2 minutes
 let cache: { data: LeaderboardEntry[]; ts: number } | null = null;
 
