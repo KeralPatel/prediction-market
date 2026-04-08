@@ -1,106 +1,103 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { Market, Outcome } from "@/types";
+import { Market, Outcome, CATEGORY_DISPLAY } from "@/types";
 import { formatPool, timeRemaining } from "@/lib/market";
 import { useStore } from "@/store/useStore";
-import clsx from "clsx";
+import { Spark, generateSparkline } from "./Spark";
 
 interface Props {
   market: Market;
 }
 
-const CATEGORY_BADGE: Record<string, string> = {
-  crypto:   "badge-crypto",
-  sports:   "badge-sports",
-  politics: "badge-politics",
-  AI:       "badge-AI",
-  finance:  "badge-finance",
-};
-
-function OutcomeChip({ outcome }: { outcome: Outcome }) {
-  if (outcome === Outcome.YES)
-    return (
-      <span className="badge bg-yes/20 text-yes border border-yes/30 text-xs">
-        Resolved YES
-      </span>
-    );
-  if (outcome === Outcome.NO)
-    return (
-      <span className="badge bg-no/20 text-no border border-no/30 text-xs">
-        Resolved NO
-      </span>
-    );
-  return null;
-}
-
 export default function MarketCard({ market }: Props) {
-  const { tokenSymbol } = useStore();
-  const badgeClass = CATEGORY_BADGE[market.category] || "badge-default";
-  const isEnded    = Date.now() / 1000 > market.endTime;
-  const remaining  = timeRemaining(market.endTime);
-  const totalPoolFormatted = formatPool(market.totalPool);
+  const [hovered, setHovered] = useState(false);
+  const { tokenSymbol }       = useStore();
+
+  const isEnded   = Date.now() / 1000 > market.endTime;
+  const remaining = timeRemaining(market.endTime);
+  const meta      = CATEGORY_DISPLAY[market.category];
+  const catColor  = meta?.color ?? "#94a3b8";
+  const catLabel  = meta?.label ?? market.category;
+
+  const pct       = market.yesProb;
+  const sparkData = generateSparkline(market.id, pct);
+  const sparkColor = pct >= 50 ? "#10b981" : "#ef4444";
+
+  const endDate = new Date(market.endTime * 1000).toLocaleDateString("en-US", {
+    month: "short", day: "numeric", year: "numeric",
+  });
 
   return (
-    <Link href={`/market/${market.id}`} className="block">
-      <div className="card-hover p-5 flex flex-col gap-4 h-full cursor-pointer animate-fade-in">
-        {/* Header */}
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex gap-2 flex-wrap">
-            <span className={badgeClass}>{market.category}</span>
-            {market.resolved && <OutcomeChip outcome={market.outcome} />}
-            {!market.resolved && isEnded && (
-              <span className="badge bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">
-                Pending Resolution
+    <Link href={`/market/${market.id}`} style={{ textDecoration: "none", display: "block" }}>
+      <div
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        style={{
+          background:   hovered ? "#162033" : "#111827",
+          border:       "1px solid #1e293b",
+          borderRadius: 12,
+          padding:      20,
+          display:      "flex",
+          flexDirection:"column",
+          justifyContent:"space-between",
+          cursor:       "pointer",
+          transition:   "all 0.2s",
+          minHeight:    200,
+        }}
+      >
+        {/* Top: badges + sparkline */}
+        <div>
+          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:12 }}>
+            <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
+              {/* Primary category badge */}
+              <span style={{
+                background: "#1e293b", color: "#94a3b8",
+                padding: "3px 8px", borderRadius: 4,
+                fontSize: 10, fontWeight: 700, letterSpacing: 0.5,
+              }}>
+                {catLabel.toUpperCase()}
               </span>
-            )}
+              {/* Status badge */}
+              {market.resolved ? (
+                <span style={{
+                  background: market.outcome === Outcome.YES ? "#10b98122" : "#ef444422",
+                  color:      market.outcome === Outcome.YES ? "#10b981" : "#ef4444",
+                  padding: "3px 8px", borderRadius: 4, fontSize: 10, fontWeight: 700,
+                }}>
+                  {market.outcome === Outcome.YES ? "RESOLVED YES" : "RESOLVED NO"}
+                </span>
+              ) : isEnded ? (
+                <span style={{ background:"#f59e0b22", color:"#f59e0b", padding:"3px 8px", borderRadius:4, fontSize:10, fontWeight:700 }}>
+                  PENDING
+                </span>
+              ) : null}
+            </div>
+            <Spark data={sparkData} color={sparkColor} w={80} h={32} />
           </div>
-          <span
-            className={clsx(
-              "text-xs whitespace-nowrap",
-              isEnded ? "text-[#546e8a]" : "text-[#8892b0]"
-            )}
-          >
-            {remaining}
-          </span>
+
+          {/* Title */}
+          <h3 style={{ color:"#f1f5f9", fontSize:15, fontWeight:600, lineHeight:1.4, margin:0,
+            display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>
+            {market.title}
+          </h3>
         </div>
 
-        {/* Title */}
-        <h3 className="text-[#e8eaf6] font-semibold text-base leading-snug line-clamp-2">
-          {market.title}
-        </h3>
+        {/* Bottom: prob bar + stats */}
+        <div>
+          <div style={{ display:"flex", alignItems:"center", gap:10, margin:"16px 0 12px" }}>
+            <div style={{ flex:1, height:4, background:"#1e293b", borderRadius:2, overflow:"hidden" }}>
+              <div style={{ width:`${pct}%`, height:"100%", background:pct>=50?"#10b981":"#ef4444", borderRadius:2 }}/>
+            </div>
+            <span style={{ color:pct>=50?"#10b981":"#ef4444", fontWeight:700, fontSize:14 }}>{pct.toFixed(0)}%</span>
+            <span style={{ color:pct>=50?"#10b981":"#ef4444", fontSize:11 }}>YES</span>
+          </div>
 
-        {/* Probability bar */}
-        <div className="space-y-2">
-          <div className="flex justify-between text-sm">
-            <span className="text-yes font-semibold">YES {market.yesProb.toFixed(1)}%</span>
-            <span className="text-no  font-semibold">NO {market.noProb.toFixed(1)}%</span>
-          </div>
-          <div className="flex gap-0.5 h-2 rounded-full overflow-hidden bg-[#0f1117]">
-            <div
-              className="prob-bar-yes"
-              style={{ width: `${market.yesProb}%` }}
-            />
-            <div
-              className="prob-bar-no"
-              style={{ width: `${market.noProb}%` }}
-            />
-          </div>
-        </div>
-
-        {/* Footer stats */}
-        <div className="flex items-center justify-between text-sm text-[#8892b0] pt-1 border-t border-[#2a3450]">
-          <div className="flex items-center gap-1">
-            <span className="text-[#546e8a] text-xs">Liquidity</span>
-            <span className="text-[#e8eaf6] font-medium">
-              {totalPoolFormatted} {tokenSymbol}
-            </span>
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="text-[#546e8a] text-xs">Vol.</span>
-            <span className="text-[#e8eaf6] font-medium">
-              {formatPool(market.totalVolume)} {tokenSymbol}
-            </span>
+          <div style={{ display:"flex", justifyContent:"space-between", color:"#64748b", fontSize:11 }}>
+            <span>Vol {formatPool(market.totalVolume)} {tokenSymbol}</span>
+            <span>Liq {formatPool(market.totalPool)} {tokenSymbol}</span>
+            <span>Ends {endDate}</span>
           </div>
         </div>
       </div>

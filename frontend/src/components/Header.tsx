@@ -1,77 +1,112 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import WalletButton from "./WalletButton";
 import { useWallet } from "@/context/WalletContext";
-import clsx from "clsx";
 
 const NAV_LINKS = [
-  { href: "/",          label: "Markets"   },
-  { href: "/create",    label: "Create"    },
-  { href: "/portfolio", label: "Portfolio" },
+  { href: "/",            label: "Markets"    },
+  { href: "/research",    label: "Research"   },
+  { href: "/leaderboard", label: "Leaderboard"},
 ];
 
 export default function Header() {
   const pathname = usePathname();
+  const router   = useRouter();
   const { wrongNetwork } = useWallet();
+  const [time, setTime] = useState("");
+
+  useEffect(() => {
+    const tick = () => {
+      const d = new Date();
+      setTime(d.toISOString().slice(11, 19) + " UTC");
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const activePage = NAV_LINKS.find(l => l.href === pathname)?.label
+    ?? (pathname.startsWith("/market") ? "Markets"
+      : pathname === "/create" ? "Markets"
+      : pathname === "/portfolio" ? "Markets"
+      : "");
 
   return (
     <>
       {wrongNetwork && (
-        <div className="bg-red-500/10 border-b border-red-500/20 text-red-400 text-sm text-center py-2 px-4">
+        <div style={{
+          background: "rgba(239,68,68,0.1)",
+          borderBottom: "1px solid rgba(239,68,68,0.2)",
+          color: "#f87171",
+          fontSize: 13,
+          textAlign: "center",
+          padding: "8px 16px",
+        }}>
           Wrong network detected. Please switch to the correct network in your wallet.
         </div>
       )}
 
-      <header className="sticky top-0 z-40 border-b border-[#2a3450] bg-[#0f1117]/90 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <nav style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "12px 24px",
+        borderBottom: "1px solid #1e293b",
+        background: "#0a0f1a",
+        position: "sticky",
+        top: 0,
+        zIndex: 40,
+      }}>
+        {/* Left: logo + nav */}
+        <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 font-bold text-lg">
-            <span className="text-2xl">◈</span>
-            <span className="text-gradient">Knightsbridge</span>
-          </Link>
+          <div
+            onClick={() => router.push("/")}
+            style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}
+          >
+            <div style={{
+              width: 20, height: 20, borderRadius: "50%",
+              background: "linear-gradient(135deg,#3b82f6,#10b981)",
+            }} />
+            <span style={{ fontWeight: 800, fontSize: 14, letterSpacing: 2, color: "#fff" }}>
+              KNIGHTSBRIDGE
+            </span>
+          </div>
 
-          {/* Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
-            {NAV_LINKS.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                className={clsx(
-                  "px-3 py-1.5 rounded-lg text-sm font-medium transition-colors",
-                  pathname === href
-                    ? "bg-brand-600/20 text-brand-400"
-                    : "text-[#8892b0] hover:text-[#e8eaf6] hover:bg-[#1a2035]"
-                )}
-              >
-                {label}
-              </Link>
-            ))}
-          </nav>
+          {/* Nav links */}
+          <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+            {NAV_LINKS.map(({ href, label }) => {
+              const active = activePage === label;
+              return (
+                <span
+                  key={href}
+                  onClick={() => router.push(href)}
+                  style={{
+                    fontSize: 14,
+                    color: active ? "#fff" : "#64748b",
+                    cursor: "pointer",
+                    fontWeight: active ? 600 : 400,
+                    borderBottom: active ? "2px solid #3b82f6" : "2px solid transparent",
+                    paddingBottom: 2,
+                    marginRight: 16,
+                    transition: "color 0.15s",
+                  }}
+                >
+                  {label}
+                </span>
+              );
+            })}
+          </div>
+        </div>
 
-          {/* Wallet */}
+        {/* Right: clock + wallet */}
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <span style={{ color: "#64748b", fontSize: 13, fontFamily: "monospace" }}>{time}</span>
           <WalletButton />
         </div>
-
-        {/* Mobile nav */}
-        <div className="md:hidden border-t border-[#2a3450] flex">
-          {NAV_LINKS.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              className={clsx(
-                "flex-1 text-center py-2 text-sm font-medium transition-colors",
-                pathname === href
-                  ? "text-brand-400 border-b-2 border-brand-400"
-                  : "text-[#8892b0]"
-              )}
-            >
-              {label}
-            </Link>
-          ))}
-        </div>
-      </header>
+      </nav>
     </>
   );
 }

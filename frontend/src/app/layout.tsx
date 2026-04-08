@@ -2,33 +2,31 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { WalletProvider } from "@/context/WalletContext";
 import Header from "@/components/Header";
+import TickerWrapper from "@/components/TickerWrapper";
 
 export const metadata: Metadata = {
-  title:       "Knightsbridge – Decentralized Prediction Markets",
-  description: "Bet on real-world events. Earn from your knowledge.",
+  title:       "Knightsbridge – Decentralised Prediction Markets",
+  description: "Trade on the outcomes that move markets. Every position settled on-chain.",
   openGraph: {
     title:       "Knightsbridge",
-    description: "Decentralized prediction markets on BNB Chain",
+    description: "Decentralised prediction markets on BNB Chain",
     type:        "website",
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
         <WalletProvider>
-          <div className="min-h-screen flex flex-col">
+          <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+            <TickerWrapper />
             <Header />
-            <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <main style={{ flex: 1, maxWidth: 1400, width: "100%", margin: "0 auto", padding: "40px 24px" }}>
               {children}
             </main>
-            <footer className="border-t border-[#2a3450] mt-16 py-8 text-center text-[#546e8a] text-sm">
-              <p>Knightsbridge — Decentralized Prediction Markets on BNB Chain</p>
+            <footer style={{ borderTop: "1px solid #1e293b", marginTop: 64, padding: "24px", textAlign: "center", color: "#475569", fontSize: 13 }}>
+              Knightsbridge · Decentralised Prediction Markets · BNB Chain
             </footer>
           </div>
         </WalletProvider>

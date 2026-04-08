@@ -166,18 +166,27 @@ export default function BettingInterface({ market, onSuccess }: Props) {
 
       {/* Order summary */}
       {amountBig > 0n && (
-        <div className="bg-[#0f1117] rounded-xl p-3 space-y-2 text-sm">
+        <div className="bg-[#0a0f1a] rounded-xl p-3 space-y-2 text-sm border border-[#1e293b]">
+          {/* Implied odds */}
+          <div className="flex justify-between items-center pb-2 border-b border-[#1e293b]">
+            <span className="text-[#64748b]">Implied odds</span>
+            <span className="font-bold text-base" style={{ color: side === "YES" ? "#10b981" : "#ef4444" }}>
+              {side === "YES"
+                ? market.yesProb > 0 ? `${(100 / market.yesProb).toFixed(2)}x` : "—"
+                : market.noProb  > 0 ? `${(100 / market.noProb).toFixed(2)}x`  : "—"}
+            </span>
+          </div>
           <div className="flex justify-between text-[#8892b0]">
             <span>Trade fee (0.5%)</span>
-            <span className="text-[#e8eaf6]">{formatTokenAmount(fee)} {tokenSymbol}</span>
+            <span className="text-[#e2e8f0]">{formatTokenAmount(fee)} {tokenSymbol}</span>
           </div>
           <div className="flex justify-between text-[#8892b0]">
             <span>Net bet</span>
-            <span className="text-[#e8eaf6]">{formatTokenAmount(netBet)} {tokenSymbol}</span>
+            <span className="text-[#e2e8f0]">{formatTokenAmount(netBet)} {tokenSymbol}</span>
           </div>
-          <div className="flex justify-between font-semibold border-t border-[#2a3450] pt-2">
-            <span className="text-[#8892b0]">Potential payout</span>
-            <span className={side === "YES" ? "text-yes" : "text-no"}>
+          <div className="flex justify-between font-semibold border-t border-[#1e293b] pt-2">
+            <span className="text-[#94a3b8]">Potential payout</span>
+            <span style={{ color: side === "YES" ? "#10b981" : "#ef4444" }}>
               {formatTokenAmount(expectedPayout)} {tokenSymbol}
             </span>
           </div>

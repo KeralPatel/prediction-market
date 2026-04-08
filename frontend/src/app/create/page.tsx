@@ -7,8 +7,7 @@ import { useWallet } from "@/context/WalletContext";
 import { useFactoryContract, useTokenContract, ensureAllowance } from "@/hooks/useContract";
 import { CONTRACT_ADDRESS, CREATION_FEE } from "@/lib/config";
 import { useStore } from "@/store/useStore";
-import { CATEGORIES, Category, TxState } from "@/types";
-import clsx from "clsx";
+import { CATEGORIES, CATEGORY_DISPLAY, Category, TxState } from "@/types";
 
 const INITIAL_TX: TxState = { status: "idle", hash: null, message: null };
 
@@ -177,22 +176,27 @@ export default function CreatePage() {
         <div className="space-y-1.5">
           <label className="text-sm font-medium text-[#e8eaf6]">Category</label>
           <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-            {CATEGORY_OPTIONS.map((cat) => (
-              <button
-                key={cat}
-                type="button"
-                onClick={() => setCategory(cat)}
-                disabled={isBusy}
-                className={clsx(
-                  "py-2 rounded-lg text-sm font-medium transition-all border capitalize",
-                  category === cat
-                    ? "bg-brand-600/20 text-brand-400 border-brand-600/40"
-                    : "bg-[#0f1117] text-[#8892b0] border-[#2a3450] hover:border-[#3a4870]"
-                )}
-              >
-                {cat}
-              </button>
-            ))}
+            {CATEGORY_OPTIONS.map((cat) => {
+              const meta   = CATEGORY_DISPLAY[cat];
+              const active = category === cat;
+              return (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setCategory(cat)}
+                  disabled={isBusy}
+                  style={{
+                    padding: "8px 12px", borderRadius: 8, fontSize: 13, fontWeight: 500,
+                    cursor: "pointer", border: `1px solid ${active ? "#3b82f6" : "#1e293b"}`,
+                    background: active ? "#1e3a5f" : "#111827",
+                    color: active ? "#60a5fa" : "#64748b",
+                    transition: "all 0.15s",
+                  }}
+                >
+                  {meta?.label ?? cat}
+                </button>
+              );
+            })}
           </div>
         </div>
 

@@ -1,44 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --bg-primary:   #0f1117;
-    --bg-secondary: #161b27;
-    --bg-card:      #1a2035;
-    --bg-elevated:  #1f2744;
-    --border:       #2a3450;
-    --text-primary: #e8eaf6;
-    --text-secondary: #8892b0;
-    --text-muted:   #546e8a;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
+  html { scroll-behavior: smooth; }
 
   body {
-    @apply bg-[#0f1117] text-[#e8eaf6] font-sans antialiased;
-    background-image:
-      radial-gradient(ellipse at 20% 50%, rgba(14, 165, 233, 0.04) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 20%, rgba(99, 102, 241, 0.04) 0%, transparent 50%);
+    @apply bg-[#0a0f1a] text-[#e2e8f0] font-sans antialiased;
   }
 
-  * {
-    @apply box-border;
-  }
+  * { @apply box-border; }
 }
 
 @layer components {
   .card {
-    @apply bg-[#1a2035] border border-[#2a3450] rounded-xl;
+    @apply bg-[#111827] border border-[#1e293b] rounded-xl;
   }
 
   .card-hover {
-    @apply card transition-all duration-200 hover:border-[#3a4870] hover:shadow-lg hover:shadow-black/20;
+    @apply card transition-all duration-200 hover:shadow-lg hover:shadow-black/20;
+    &:hover { background-color: #162033; border-color: #2d3f5e; }
   }
 
   .btn {
@@ -47,29 +30,29 @@
   }
 
   .btn-primary {
-    @apply btn bg-brand-600 hover:bg-brand-500 text-white;
+    @apply btn bg-[#3b82f6] hover:bg-[#2563eb] text-white;
   }
 
   .btn-secondary {
-    @apply btn bg-[#1f2744] hover:bg-[#2a3450] text-[#e8eaf6] border border-[#2a3450] hover:border-[#3a4870];
+    @apply btn bg-[#111827] hover:bg-[#162033] text-[#e2e8f0] border border-[#1e293b] hover:border-[#2d3f5e];
   }
 
   .btn-yes {
-    @apply btn bg-yes hover:bg-yes-dark text-white;
+    @apply btn bg-[#10b981] hover:bg-[#059669] text-white;
   }
 
   .btn-no {
-    @apply btn bg-no hover:bg-no-dark text-white;
+    @apply btn bg-[#ef4444] hover:bg-[#dc2626] text-white;
   }
 
   .btn-outline {
-    @apply btn border border-[#2a3450] text-[#8892b0] hover:border-brand-500 hover:text-brand-400;
+    @apply btn border border-[#1e293b] text-[#94a3b8] hover:border-[#3b82f6] hover:text-[#60a5fa];
   }
 
   .input {
-    @apply w-full bg-[#0f1117] border border-[#2a3450] rounded-lg px-3 py-2 text-[#e8eaf6]
-           placeholder:text-[#546e8a] focus:outline-none focus:ring-2 focus:ring-brand-500/50
-           focus:border-brand-500 transition-colors;
+    @apply w-full bg-[#111827] border border-[#1e293b] rounded-lg px-3 py-2 text-[#f1f5f9]
+           placeholder:text-[#475569] focus:outline-none focus:ring-2 focus:ring-[#3b82f6]/50
+           focus:border-[#3b82f6] transition-colors;
   }
 
   .textarea {
@@ -80,32 +63,46 @@
     @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
   }
 
-  .badge-crypto   { @apply badge bg-yellow-500/10 text-yellow-400; }
-  .badge-sports   { @apply badge bg-green-500/10  text-green-400; }
-  .badge-politics { @apply badge bg-purple-500/10 text-purple-400; }
-  .badge-AI       { @apply badge bg-blue-500/10   text-blue-400; }
-  .badge-finance  { @apply badge bg-orange-500/10 text-orange-400; }
-  .badge-default  { @apply badge bg-gray-500/10   text-gray-400; }
+  /* Legacy category badges */
+  .badge-crypto   { @apply badge bg-[#10b981]/10 text-[#10b981]; }
+  .badge-sports   { @apply badge bg-[#f59e0b]/10 text-[#f59e0b]; }
+  .badge-politics { @apply badge bg-[#8b5cf6]/10 text-[#8b5cf6]; }
+  .badge-AI       { @apply badge bg-[#3b82f6]/10 text-[#3b82f6]; }
+  .badge-finance  { @apply badge bg-[#10b981]/10 text-[#10b981]; }
+  .badge-default  { @apply badge bg-[#94a3b8]/10 text-[#94a3b8]; }
 
-  .prob-bar-yes {
-    @apply h-2 bg-yes rounded-full transition-all duration-500;
-  }
+  /* New category badges */
+  .badge-central-bank { @apply badge bg-[#3b82f6]/10 text-[#3b82f6]; }
+  .badge-elections    { @apply badge bg-[#8b5cf6]/10 text-[#8b5cf6]; }
+  .badge-macro        { @apply badge bg-[#f59e0b]/10 text-[#f59e0b]; }
+  .badge-geopolitics  { @apply badge bg-[#ef4444]/10 text-[#ef4444]; }
+  .badge-commodities  { @apply badge bg-[#3b82f6]/10 text-[#3b82f6]; }
+  .badge-regulatory   { @apply badge bg-[#f59e0b]/10 text-[#f59e0b]; }
 
-  .prob-bar-no {
-    @apply h-2 bg-no rounded-full transition-all duration-500;
-  }
+  .prob-bar-yes { @apply bg-[#10b981] transition-all duration-500; }
+  .prob-bar-no  { @apply bg-[#ef4444] transition-all duration-500; }
 }
 
 @layer utilities {
   .text-gradient {
-    @apply bg-gradient-to-r from-brand-400 to-indigo-400 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-[#3b82f6] to-[#10b981] bg-clip-text text-transparent;
   }
 
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+
+  .animate-fade-in { animation: fadeIn 0.2s ease-in-out; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
 }

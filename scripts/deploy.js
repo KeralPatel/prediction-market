@@ -15,9 +15,11 @@ async function main() {
   let tokenAddress = process.env.TOKEN_ADDRESS;
 
   if (!tokenAddress || isLocalOrTestnet) {
-    console.log("\nDeploying MockERC20 (USDT mock)...");
+    const tokenName   = process.env.TOKEN_NAME   || "Test Token";
+    const tokenSymbol = process.env.TOKEN_SYMBOL || "TEST";
+    console.log(`\nDeploying MockERC20 (${tokenName} / ${tokenSymbol})...`);
     const MockERC20 = await ethers.getContractFactory("MockERC20");
-    const token = await MockERC20.deploy("Mock USDT", "mUSDT");
+    const token = await MockERC20.deploy(tokenName, tokenSymbol);
     await token.waitForDeployment();
     tokenAddress = await token.getAddress();
     console.log("MockERC20 deployed to:", tokenAddress);
@@ -80,31 +82,31 @@ async function main() {
         title: "Will Bitcoin reach $200,000 before 2027?",
         description: "This market resolves YES if BTC/USD price reaches $200,000 on any major exchange before January 1, 2027.",
         category: "crypto",
-        endTime: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 90, // 90 days
+        endTime: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 90,
       },
       {
-        title: "Will Ethereum complete its next major upgrade in 2025?",
-        description: "Resolves YES if Ethereum successfully deploys a major network upgrade (e.g., Pectra) by December 31, 2025.",
-        category: "crypto",
+        title: "Will the Federal Reserve cut rates by 50bps or more at the June 2026 FOMC?",
+        description: "Resolves YES if the FOMC announces a rate cut of 50 basis points or more at the June 2026 meeting.",
+        category: "central-bank",
         endTime: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 120,
       },
       {
-        title: "Will AI surpass human performance on all major benchmarks by end of 2025?",
-        description: "Resolves YES if a publicly available AI system achieves superhuman performance on all MMLU, HumanEval, and GPQA benchmarks.",
-        category: "AI",
-        endTime: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 60,
+        title: "Will the SEC approve a spot Solana ETF by end of 2026?",
+        description: "Resolves YES if the SEC approves any spot Solana ETF application before December 31, 2026.",
+        category: "regulatory",
+        endTime: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 270,
       },
       {
-        title: "Will the S&P 500 close above 6000 by Q2 2025?",
-        description: "Resolves YES if the S&P 500 index closes at or above 6000 points on any trading day before July 1, 2025.",
-        category: "finance",
-        endTime: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 45,
+        title: "Will US headline CPI exceed 4.0% YoY before Q4 2026?",
+        description: "Resolves YES if the US Bureau of Labor Statistics reports headline CPI above 4.0% year-over-year at any point before October 1, 2026.",
+        category: "macro",
+        endTime: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 170,
       },
       {
-        title: "Will global inflation drop below 3% in 2025?",
-        description: "Resolves YES if the IMF global inflation rate drops below 3% for any single month in 2025.",
-        category: "politics",
-        endTime: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 180,
+        title: "Will the US impose tariffs >60% on Chinese EVs before 2027?",
+        description: "Resolves YES if the US government officially implements tariffs exceeding 60% on Chinese electric vehicles before January 1, 2027.",
+        category: "geopolitics",
+        endTime: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 200,
       },
     ];
 

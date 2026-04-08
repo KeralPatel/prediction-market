@@ -6,7 +6,6 @@ export enum Outcome {
   NO         = 2,
 }
 
-/** Raw market data as returned by the smart contract (BigInt fields) */
 export interface RawMarket {
   id:          bigint;
   title:       string;
@@ -22,39 +21,36 @@ export interface RawMarket {
   totalVolume: bigint;
 }
 
-/** Parsed market for frontend display */
 export interface Market {
-  id:             number;
-  title:          string;
-  description:    string;
-  category:       string;
-  creator:        string;
-  endTime:        number;       // Unix seconds
-  yesPool:        bigint;
-  noPool:         bigint;
-  totalPool:      bigint;
-  resolved:       boolean;
-  outcome:        Outcome;
-  createdAt:      number;       // Unix seconds
-  totalVolume:    bigint;
-  yesProbBps:     number;       // basis points (5000 = 50%)
-  noProbBps:      number;
-  yesProb:        number;       // 0–100 %
-  noProb:         number;
+  id:          number;
+  title:       string;
+  description: string;
+  category:    string;
+  creator:     string;
+  endTime:     number;
+  yesPool:     bigint;
+  noPool:      bigint;
+  totalPool:   bigint;
+  resolved:    boolean;
+  outcome:     Outcome;
+  createdAt:   number;
+  totalVolume: bigint;
+  yesProbBps:  number;
+  noProbBps:   number;
+  yesProb:     number;
+  noProb:      number;
 }
 
-/** Raw bet data from contract */
 export interface RawBet {
   yesAmount: bigint;
   noAmount:  bigint;
   claimed:   boolean;
 }
 
-/** Portfolio item – combines market + user bet */
 export interface PortfolioItem {
   market:        Market;
   bet:           RawBet;
-  pendingPayout: bigint;       // 0 if not claimable
+  pendingPayout: bigint;
   canClaim:      boolean;
   canRefund:     boolean;
 }
@@ -65,6 +61,12 @@ export type SortMode = "trending" | "liquidity" | "ending" | "newest";
 
 export type Category =
   | "all"
+  | "central-bank"
+  | "elections"
+  | "macro"
+  | "geopolitics"
+  | "commodities"
+  | "regulatory"
   | "crypto"
   | "sports"
   | "politics"
@@ -72,8 +74,31 @@ export type Category =
   | "finance";
 
 export const CATEGORIES: Category[] = [
-  "all", "crypto", "sports", "politics", "AI", "finance",
+  "all",
+  "central-bank",
+  "elections",
+  "macro",
+  "geopolitics",
+  "commodities",
+  "regulatory",
+  "crypto",
 ];
+
+export const CATEGORY_DISPLAY: Record<string, { label: string; color: string }> = {
+  "all":          { label: "All Markets",  color: "#94a3b8" },
+  "central-bank": { label: "Central Bank", color: "#3b82f6" },
+  "elections":    { label: "Elections",    color: "#8b5cf6" },
+  "macro":        { label: "Macro",        color: "#f59e0b" },
+  "geopolitics":  { label: "Geopolitics",  color: "#ef4444" },
+  "commodities":  { label: "Commodities",  color: "#3b82f6" },
+  "regulatory":   { label: "Regulatory",   color: "#f59e0b" },
+  "crypto":       { label: "Crypto",       color: "#10b981" },
+  // Legacy categories
+  "sports":   { label: "Sports",   color: "#f59e0b" },
+  "politics": { label: "Politics", color: "#8b5cf6" },
+  "AI":       { label: "AI",       color: "#3b82f6" },
+  "finance":  { label: "Finance",  color: "#10b981" },
+};
 
 // ─── Indexer Types ─────────────────────────────────────────────────────────
 
@@ -92,12 +117,12 @@ export interface VolumePoint {
 }
 
 export interface BetEvent {
-  id:           number;
-  event_name:   string;
-  market_id:    number;
-  block_number: number;
+  id:              number;
+  event_name:      string;
+  market_id:       number;
+  block_number:    number;
   block_timestamp: number;
-  tx_hash:      string;
+  tx_hash:         string;
   data: {
     bettor:      string;
     isYes:       boolean;
@@ -109,9 +134,9 @@ export interface BetEvent {
 // ─── Wallet Types ──────────────────────────────────────────────────────────
 
 export interface WalletState {
-  address:     string | null;
-  chainId:     number | null;
-  isConnected: boolean;
+  address:      string | null;
+  chainId:      number | null;
+  isConnected:  boolean;
   isConnecting: boolean;
   wrongNetwork: boolean;
 }
@@ -125,3 +150,46 @@ export interface TxState {
   hash:    string | null;
   message: string | null;
 }
+
+// ─── Price / News / Leaderboard Types ──────────────────────────────────────
+
+export interface AssetPrice {
+  name:   string;
+  sym:    string;
+  price:  number;
+  chg:    number;
+  chgPct: number;
+  color:  string;
+  spark:  number[];
+  src:    string;
+}
+
+export interface MacroIndicator {
+  label: string;
+  value: string;
+  chg:   string;
+  up:    boolean | null;
+}
+
+export interface NewsItem {
+  time:     string;
+  src:      string;
+  tag:      string;
+  tagColor: string;
+  title:    string;
+  snippet:  string;
+  url?:     string;
+}
+
+export interface LeaderboardEntry {
+  rank:          number;
+  address:       string;
+  totalBet:      string;
+  totalReceived: string;
+  pnl:           string;
+  pnlRaw:        number;
+  accuracy:      number;
+  totalBets:     number;
+  winningBets:   number;
+}
+
