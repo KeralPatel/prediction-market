@@ -28,7 +28,8 @@ export async function GET() {
   }
 
   try {
-    const provider = new ethers.JsonRpcProvider(RPC_URL);
+    const chainId  = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || "97");
+    const provider = new ethers.JsonRpcProvider(RPC_URL, chainId, { staticNetwork: true });
     const contract = new ethers.Contract(CONTRACT_ADDRESS, MARKET_FACTORY_ABI, provider);
 
     const currentBlock = await provider.getBlockNumber();
