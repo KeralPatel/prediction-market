@@ -51,7 +51,7 @@ export default function MarketsPage() {
           Where capital meets conviction.
         </h1>
         <p style={{ color: "#64748b", fontSize: 15, margin: "0 0 20px", maxWidth: 500 }}>
-          Trade on the outcomes that move markets. Every position is settled on-chain against verified resolution sources.
+          Trade on the outcomes that move markets. Every position settles instantly on-chain against verified, tamper-proof resolution sources.
         </p>
         <Link
           href="/create"
