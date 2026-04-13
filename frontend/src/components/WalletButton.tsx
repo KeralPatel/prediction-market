@@ -2,10 +2,35 @@
 
 import { useRouter } from "next/navigation";
 import { useWallet } from "@/context/WalletContext";
-import { getChainInfo } from "@/lib/config";
+import { getChainInfo, CHAIN_ID } from "@/lib/config";
 
 function shortAddress(addr: string): string {
   return `${addr.slice(0, 6)}…${addr.slice(-4)}`;
+}
+
+async function switchToBSC() {
+  if (!window.ethereum) return;
+  const chainHex = "0x" + CHAIN_ID.toString(16);
+  try {
+    await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: chainHex }] });
+  } catch (err: unknown) {
+    // 4902 = chain not added to MetaMask yet
+    const code = (err as { code?: number })?.code;
+    if (code === 4902) {
+      const info = getChainInfo(CHAIN_ID);
+      if (!info) return;
+      await window.ethereum.request({
+        method: "wallet_addEthereumChain",
+        params: [{
+          chainId: chainHex,
+          chainName: info.name,
+          nativeCurrency: info.nativeCurrency,
+          rpcUrls: [info.rpcUrl],
+          blockExplorerUrls: [info.blockExplorer],
+        }],
+      });
+    }
+  }
 }
 
 export default function WalletButton() {
@@ -54,12 +79,17 @@ export default function WalletButton() {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
       {wrongNetwork ? (
-        <span style={{
-          fontSize: 11, color: "#f87171", background: "rgba(239,68,68,0.1)",
-          padding: "3px 8px", borderRadius: 6, border: "1px solid rgba(239,68,68,0.2)",
-        }}>
-          Wrong Network
-        </span>
+        <button
+          onClick={switchToBSC}
+          title="Click to switch to BNB Smart Chain"
+          style={{
+            fontSize: 11, color: "#f87171", background: "rgba(239,68,68,0.1)",
+            padding: "3px 8px", borderRadius: 6, border: "1px solid rgba(239,68,68,0.2)",
+            cursor: "pointer",
+          }}
+        >
+          Wrong Network — Switch
+        </button>
       ) : chainInfo && (
         <span style={{
           display: "flex", alignItems: "center", gap: 4, fontSize: 11,
