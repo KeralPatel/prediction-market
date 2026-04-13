@@ -45,7 +45,7 @@ export default function MarketsPage() {
       {/* Hero */}
       <div style={{ marginBottom: 40 }}>
         <p style={{ color: "#3b82f6", fontSize: 11, letterSpacing: 2, fontWeight: 700, margin: "0 0 8px" }}>
-          DECENTRALISED FORECASTING PROTOCOL · BNB CHAIN
+          Risk Intelligence Liquidity Forecasting System
         </p>
         <h1 style={{ fontSize: 40, fontWeight: 800, margin: "0 0 12px", color: "#fff", lineHeight: 1.1 }}>
           Where capital meets conviction.
