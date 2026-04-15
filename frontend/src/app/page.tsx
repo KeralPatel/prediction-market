@@ -48,7 +48,7 @@ export default function MarketsPage() {
           Risk Intelligence Liquidity Forecasting System
         </p>
         <h1 style={{ fontSize: 40, fontWeight: 800, margin: "0 0 12px", color: "#fff", lineHeight: 1.1 }}>
-          Where capital meets conviction.
+          Where conviction turns into capital.
         </h1>
         <p style={{ color: "#64748b", fontSize: 15, margin: "0 0 20px", maxWidth: 500 }}>
           Trade on the outcomes that move markets. Every position settles instantly on-chain against verified, tamper-proof resolution sources.

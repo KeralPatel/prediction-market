@@ -82,6 +82,7 @@ export const CATEGORIES: Category[] = [
   "commodities",
   "regulatory",
   "crypto",
+  "sports",
 ];
 
 export const CATEGORY_DISPLAY: Record<string, { label: string; color: string }> = {
